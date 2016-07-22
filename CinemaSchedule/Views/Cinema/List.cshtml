@@ -1,0 +1,41 @@
+﻿@model CinemaSchedule.Models.CinemaData
+
+<div style="margin-top: 20px;">
+
+    @using (Html.BeginForm("GetSchedule", "Cinema", FormMethod.Post))
+    {
+
+        @Html.TextBoxFor(a => a.DateTime, new { type = "date" })
+
+        @*@Html.ActionLink("Show", "GetSchedule", "Cinema", new { data = Model == null ? new DateTime() : Model.DateTime }, null)*@
+
+        @Html.TextBox("Show", "Показать", new { type = "submit" })
+        @Html.TextBox("Add", "Добавить", new { type = "button" })
+        
+    }
+
+    <br>
+
+    @if (Model != null)
+    {
+        foreach (var session in Model.Cinema)
+        {
+            <table border="1">
+                <tr>
+                    <td>
+                        @Html.Label(session.Theater)
+                    <td>
+                    <td>
+                        @Html.Label(session.Theater)
+                    <td>
+                    <td>
+                        @Html.Label(session.Theater)
+                    <td>
+                    <td>
+                        @Html.Label(session.Theater)
+                    <td>
+                <tr>
+            </table>
+        }
+    }
+</div>
