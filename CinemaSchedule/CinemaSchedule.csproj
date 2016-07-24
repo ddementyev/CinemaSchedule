@@ -162,6 +162,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Cinema\List.cshtml" />
+    <Content Include="Views\Cinema\AddMovie.cshtml" />
+    <Content Include="Views\Cinema\EditMovie.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -202,6 +204,7 @@
       <DependentUpon>201607221238144_v1.0.0.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\CinemaCatalog.cs" />
     <Compile Include="Models\CinemaDb\CinemaDb.cs" />
     <Compile Include="Controllers\CinemaController.cs" />
     <Compile Include="Global.asax.cs">

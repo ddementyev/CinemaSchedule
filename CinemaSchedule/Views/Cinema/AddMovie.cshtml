@@ -1,0 +1,30 @@
+﻿<link href="~/Content/bootstrap.css" rel="stylesheet" />
+@model CinemaSchedule.Models.BigViewModel
+
+
+@using (Html.BeginForm("AddMovie", "Cinema", FormMethod.Post))
+{
+
+    @Html.DropDownListFor(m => m.SelectedDataModel.SelectedTheater, Model.CinemaCatalogModel.Theaters.Select(a => new SelectListItem()
+{
+    Text = a.Theater,
+    Value = a.Theater
+}))
+
+    @Html.DropDownListFor(m => m.SelectedDataModel.SelectedMovie, Model.CinemaCatalogModel.Movies.Select(a => new SelectListItem()
+{
+    Text = a.Movie,
+    Value = a.Movie
+
+}))
+
+
+
+
+
+    @Html.TextBoxFor(a => a.SelectedDataModel.Date, new { type = "date" })
+    @Html.TextBoxFor(a => a.SelectedDataModel.Time, new { type = "time" })
+
+    @Html.TextBox("Add", "Добавить", new { type = "submit" })
+}
+
