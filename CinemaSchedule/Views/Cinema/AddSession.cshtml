@@ -1,0 +1,29 @@
+﻿@model CinemaSchedule.Models.SessionModel
+
+@Html.Label("Добавить сеанс", new { @class = "mtop20", style = "font-size: 20px;" })
+
+@using (Html.BeginForm("AddSession", "Cinema", FormMethod.Post))
+{
+    @Html.Label("Кинотеатр:", new { @class = "mtop20" });
+    @Html.DropDownListFor(m => m.Session.Theater, Model.CinemaCatalog.Theaters.Select(a => new SelectListItem()
+        {
+            Text = a.Theater,
+            Value = a.Theater
+        }), new { @class= "form-control" })
+
+    @Html.Label("Фильм:", new { @class = "mtop20" });
+    @Html.DropDownListFor(m => m.Session.Movie, Model.CinemaCatalog.Movies.Select(a => new SelectListItem()
+        {
+            Text = a.Movie,
+            Value = a.Movie
+
+        }), new { @class = "form-control" })
+
+    @Html.Label("Дата:", new { @class = "mtop20" });
+    @Html.TextBoxFor(a => a.Session.Date, new { type = "date", @class = "form-control" })
+    @Html.Label("Время:", new { @class = "mtop20" });
+    @Html.TextBoxFor(a => a.Session.Time, new { type = "time", @class = "form-control" })
+
+    @Html.TextBox("Add", "Добавить", new { type = "submit", @class = "btn btn-success mtop20" })
+}
+

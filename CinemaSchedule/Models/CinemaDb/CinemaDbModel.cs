@@ -5,10 +5,10 @@ namespace CinemaSchedule
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
 
-    public partial class CinemaDb : DbContext
+    public partial class CinemaDbModel : DbContext
     {
-        public CinemaDb()
-            : base("name=CinemaContext")
+        public CinemaDbModel()
+            : base("name=CinemaDb")
         {
         }
 

@@ -1,7 +1,13 @@
-﻿using CinemaSchedule.Models;
+﻿using AutoMapper;
+using CinemaSchedule.App_Start;
+using CinemaSchedule.Interfaces;
+using CinemaSchedule.Models;
+using CinemaSchedule.Services;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -10,49 +16,37 @@ namespace CinemaSchedule.Controllers
 {
     public class CinemaController : Controller
     {
-        private readonly CinemaDb _cinemaDb;
+        private readonly CinemaDbModel _cinemaDb;
+        private readonly ICinemaService _cinemaService;
+        private readonly IScheduleService _scheduleService;
 
-        public CinemaController(CinemaDb cinemaDb)
+        public CinemaController(CinemaDbModel cinemaDb, ICinemaService cinemaService, IScheduleService scheduleService)
         {
             _cinemaDb = cinemaDb;
+            _cinemaService = cinemaService;
+            _scheduleService = scheduleService;
         }
 
-        public ActionResult List()
+        public ActionResult Sessions(Cinema cinema)
         {
-            return View();
-        }
-
-        public ActionResult GetSchedule(CinemaData data)
-        {
-            var movies = _cinemaDb.Sessions.Where(a => a.Date == data.DateTime).GroupBy(t => t.Theater).ToList();
-
-
-            data.Cinema = BuildTheaterData(movies);
-
-
-            //  = _cinemaDb.Sessions.Where(a => a.Date == data.DateTime).ToList();
-
-            return View("List", data);
-        }
-
-        public ActionResult AddMovie(BigViewModel cat)
-        {
-            var model = new BigViewModel();
-            if (cat.SelectedDataModel != null)
+            if (ModelState.IsValid)
             {
-                var session = new Sessions()
-                {
-                    Theater = cat.SelectedDataModel.SelectedTheater,
-                    Movie = cat.SelectedDataModel.SelectedMovie,
-                    Date = cat.SelectedDataModel.Date,
-                    Time = cat.SelectedDataModel.Time
-                };
-
-                _cinemaDb.Sessions.Add(session);
-                _cinemaDb.SaveChanges();
-                return View("List");
+                var sessions = _cinemaDb.Sessions.Where(d => d.Date == cinema.DateTime).GroupBy(t => t.Theater).ToList();
+                cinema.Schedule = _scheduleService.MakeSchedule(sessions);
             }
-            model.CinemaCatalogModel = new CinemaCatalogModel()
+            return View(cinema);
+        }
+
+        public ActionResult AddSession(SessionModel model)
+        {
+            //var model = new SessionModel();
+            if (model.Session != null)
+            {
+                _cinemaService.EditSession(model.Session, ActionType.AddSession);
+                return View("Sessions");
+            }
+
+            model.CinemaCatalog = new CinemaCatalog()
             {
                 Theaters = _cinemaDb.Theaters.ToList(),
                 Movies = _cinemaDb.Movies.ToList(),
@@ -61,47 +55,19 @@ namespace CinemaSchedule.Controllers
             return View(model);
         }
 
-        public ActionResult EditMovie(string session)
+        public ActionResult EditSession(string session)
         {
-            var res = JsonConvert.DeserializeObject<BaseData>(session);
-
+            var res = JsonConvert.DeserializeObject<CinemaSchedule.Models.Sessions>(session);
             return View(res);
         }
 
-        public ActionResult DeleteMovie(BaseData session)
+        public ActionResult DeleteSession(CinemaSchedule.Models.Sessions session)
         {
-           var data = new CinemaData();
-            //var movies = _cinemaDb.Sessions.Where(a => a.Theater == session.Theater && a.Movie == session.Movie && a.Date == session.Date).GroupBy(a => a.Theater).ToList();
-            //data.Cinema = BuildTheaterData(movies);
-            //data.DateTime = session.Date;
-            return View(data);
-        }
+            IMapper Mapper = MappingConfig.MapperConfiguration.CreateMapper();
+            var dest = Mapper.Map<CinemaSchedule.Models.Sessions, Session>(session);
+            _cinemaService.EditSession(dest, ActionType.DeleteSession);
 
-        public List<TheaterData> BuildTheaterData(List<IGrouping<string, Sessions>> movies)
-        {
-            var data = new List<TheaterData>();
-            foreach (var group in movies)
-            {
-                var movs = new List<MovieData>();
-                var groupMovies = group.Select(a => a.Movie).Distinct();
-
-                foreach (var g in groupMovies)
-                {
-                    movs.Add(new MovieData()
-                    {
-                        MovieTitle = g,
-                        MovieSessions = group.Where(b => b.Movie == g).Select(a => a.Time.ToString()).ToList()
-                    });
-                }
-
-                data.Add(new TheaterData()
-                {
-                    Theater = group.Key,
-                    Movies = movs
-
-                });
-            }
-            return data;
+            return View("Sessions");
         }
     }
 }

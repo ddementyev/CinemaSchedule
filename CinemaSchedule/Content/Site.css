@@ -16,3 +16,19 @@ textarea {
     max-width: 280px;
 }
 
+.mtop20 {
+    margin-top: 20px;
+}
+
+.mleft10 {
+    margin-left: 10px;
+}
+
+.validation-summary-valid {
+    display: none;
+}
+
+.field-validation-error {
+    color: red;
+    font-weight: bold;
+}

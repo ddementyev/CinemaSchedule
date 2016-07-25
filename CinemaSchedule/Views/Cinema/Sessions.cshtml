@@ -1,0 +1,86 @@
+﻿@model CinemaSchedule.Models.Cinema
+
+@using (Html.BeginForm("Sessions", "Cinema", FormMethod.Post))
+{
+    @Html.Label("Выберите дату:", new { @class = "mtop20" });
+    @Html.TextBoxFor(a => a.DateTime, new { type = "date", @class = "form-control" })
+    @Html.ValidationMessageFor(a => a.DateTime)<br />
+    @Html.TextBox("Show", "Показать", new { type = "submit", @class = "btn btn-success mtop20" })
+    @Html.ActionLink("Добавить", "AddSession", "Cinema", null, new { @class = "btn btn-success mtop20 mleft10" })
+}
+
+
+
+@if (Model != null && ViewData.ModelState.IsValid)
+{
+
+    <table class="table table-bordered mtop20" style="border:none">
+        <tr class="active">
+            <th>Кинотеатр</th>
+            <th>Фильм</th>
+            <th>Сеансы</th>
+        </tr>
+        @foreach (var session in Model.Schedule)
+                {
+            <tr>
+                <td>
+                    @Html.Label(session.Theater)
+                </td>
+            </tr>
+            foreach (var vv in session.Movies)
+            {
+                <tr>
+                    <td style="border: none"></td>
+                    <td>
+                        @Html.Label(vv.Title)
+                    </td>
+
+                    <td>
+                        @foreach (var qwe in vv.Sessions)
+                        {
+                            var lastElem = vv.Sessions.LastOrDefault();
+                            var time = string.Format("{0:hh\\:mm}", qwe);
+
+
+                            @Html.Label(lastElem == qwe ? time : time + ",", new { style = "padding-left: 4px" })
+                        }
+                    </td>
+
+                    <td style="border: none">
+                        @{
+
+                            var datawer = new CinemaSchedule.Models.Sessions()
+                            {
+                                Time = null,
+                                Date = string.Format("{0:dd/MM/yyyy}", Model.DateTime),
+                                Theater = session.Theater,
+                                //Movies = new List<CinemaSchedule.Models.MovieData>()
+                                //{
+                                //    new CinemaSchedule.Models.MovieData()
+                                //    {
+                                //        MovieTitle = vv.MovieTitle,
+                                //        MovieSessions = vv.MovieSessions
+                                //    }
+                                //}
+                                Movie = new CinemaSchedule.Models.Movie()
+                                {
+                                    Title = vv.Title,
+                                    Sessions = vv.Sessions
+                                }
+
+
+                            };
+
+                        }
+                        @Html.ActionLink("Редактировать", "EditSession", "Cinema", new { session = Json.Encode(datawer) }, null)
+                    </td>
+
+                </tr>
+
+
+                                }
+                            }
+    </table>
+
+
+         }

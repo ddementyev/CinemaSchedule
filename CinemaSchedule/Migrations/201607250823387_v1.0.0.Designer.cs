@@ -13,7 +13,7 @@ namespace CinemaSchedule.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201607221238144_v1.0.0"; }
+            get { return "201607250823387_v1.0.0"; }
         }
         
         string IMigrationMetadata.Source

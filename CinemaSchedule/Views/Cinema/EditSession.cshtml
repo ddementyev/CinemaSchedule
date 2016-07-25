@@ -1,0 +1,32 @@
+﻿@model CinemaSchedule.Models.Sessions
+
+@Html.Label("Редактировать сеансы", new { @class = "mtop20", style = "font-size: 20px;" })
+
+@using (Html.BeginForm("DeleteSession", "Cinema", FormMethod.Post))
+{      
+        @Html.TextBoxFor(a=>a.Theater, new { @class = "form-control mtop20", @readonly = "readonly" })
+        @Html.TextBoxFor(a=>a.Movie.Title, new { @class = "form-control mtop20", @readonly = "readonly" })
+        @Html.TextBoxFor(a=>a.Date, new { @class = "form-control mtop20", @readonly = "readonly" })
+        @Html.DropDownListFor(a=>a.Time, Model.Movie.Sessions.Select(a => new SelectListItem()
+           {
+               Text = a,
+               Value = string.Format("{0:hh\\:mm}", a)
+
+           }), new { size = 5, style = "width: 280px;",  @class = "form-control mtop20" })
+
+        <br />
+
+
+    //var datawer = new Sessions()
+    //{
+    //    Theater = cinema.Theater,
+    //    Movie = cinema.Movies.FirstOrDefault().MovieTitle,
+    //    Date = Model.DateTime,
+    //    Time = Model.SelectedSession
+    //};
+
+        @*@Html.ActionLink("Удалить выбранный сеанс", "DeleteSession", "Cinema", datawer, null)*@
+        @Html.TextBox("Edit", "Удалить сеанс", new { type = "submit", @class = "btn btn-success mtop20" })
+        <br />
+        @Html.ActionLink("Добавить сеанс", "AddSession", "Cinema", null, new { @class = "btn btn-success mtop20" })
+}
