@@ -13,13 +13,12 @@ namespace CinemaSchedule.Models
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         [Required(ErrorMessage = "Введите дату")]
         public DateTime DateTime { get; set; }
-        public List<Schedule> Schedule { get; set; }
 
+        public List<Schedule> Schedule { get; set; }
         public Cinema()
         {
             DateTime = DateTime.Now.Date;
         }
-
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (DateTime.Date < DateTime.Now.Date)

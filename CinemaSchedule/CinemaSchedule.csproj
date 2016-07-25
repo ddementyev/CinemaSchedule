@@ -161,6 +161,7 @@
     <Content Include="Views\Cinema\Sessions.cshtml" />
     <Content Include="Views\Cinema\AddSession.cshtml" />
     <Content Include="Views\Cinema\EditSession.cshtml" />
+    <None Include="Properties\PublishProfiles\Test.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

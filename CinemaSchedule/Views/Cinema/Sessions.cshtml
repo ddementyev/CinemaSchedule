@@ -3,84 +3,61 @@
 @using (Html.BeginForm("Sessions", "Cinema", FormMethod.Post))
 {
     @Html.Label("Выберите дату:", new { @class = "mtop20" });
-    @Html.TextBoxFor(a => a.DateTime, new { type = "date", @class = "form-control" })
-    @Html.ValidationMessageFor(a => a.DateTime)<br />
+    @Html.TextBoxFor(d => d.DateTime, new { type = "date", @class = "form-control" })
+    @Html.ValidationMessageFor(d => d.DateTime)<br />
     @Html.TextBox("Show", "Показать", new { type = "submit", @class = "btn btn-success mtop20" })
     @Html.ActionLink("Добавить", "AddSession", "Cinema", null, new { @class = "btn btn-success mtop20 mleft10" })
 }
-
-
-
-@if (Model != null && ViewData.ModelState.IsValid)
+@*@if (Model != null && ViewData.ModelState.IsValid)*@
+@if (Model != null)
 {
-
     <table class="table table-bordered mtop20" style="border:none">
         <tr class="active">
             <th>Кинотеатр</th>
             <th>Фильм</th>
             <th>Сеансы</th>
         </tr>
-        @foreach (var session in Model.Schedule)
+        @foreach (var schedule in Model.Schedule)
                 {
             <tr>
                 <td>
-                    @Html.Label(session.Theater)
+                    @Html.Label(schedule.Theater)
                 </td>
             </tr>
-            foreach (var vv in session.Movies)
+            foreach (var movie in schedule.Movies)
             {
                 <tr>
                     <td style="border: none"></td>
                     <td>
-                        @Html.Label(vv.Title)
+                        @Html.Label(movie.Title)
                     </td>
 
                     <td>
-                        @foreach (var qwe in vv.Sessions)
+                        @foreach (var session in movie.Sessions)
                         {
-                            var lastElem = vv.Sessions.LastOrDefault();
-                            var time = string.Format("{0:hh\\:mm}", qwe);
-
-
-                            @Html.Label(lastElem == qwe ? time : time + ",", new { style = "padding-left: 4px" })
+                            var lastSession = movie.Sessions.LastOrDefault();
+                            var time = string.Format("{0:hh\\:mm}", session);
+                            @Html.Label(lastSession == session ? time : time + ",", new { style = "padding-left: 4px" })
                         }
                     </td>
-
                     <td style="border: none">
                         @{
-
-                            var datawer = new CinemaSchedule.Models.Sessions()
+                            var sessionData = new CinemaSchedule.Models.Sessions()
                             {
-                                Time = null,
-                                Date = string.Format("{0:dd/MM/yyyy}", Model.DateTime),
-                                Theater = session.Theater,
-                                //Movies = new List<CinemaSchedule.Models.MovieData>()
-                                //{
-                                //    new CinemaSchedule.Models.MovieData()
-                                //    {
-                                //        MovieTitle = vv.MovieTitle,
-                                //        MovieSessions = vv.MovieSessions
-                                //    }
-                                //}
+                                Theater = schedule.Theater,
                                 Movie = new CinemaSchedule.Models.Movie()
                                 {
-                                    Title = vv.Title,
-                                    Sessions = vv.Sessions
-                                }
-
-
+                                    Title = movie.Title,
+                                    Sessions = movie.Sessions
+                                },
+                                Date = string.Format("{0:dd/MM/yyyy}", Model.DateTime),
+                                Time = null
                             };
-
                         }
-                        @Html.ActionLink("Редактировать", "EditSession", "Cinema", new { session = Json.Encode(datawer) }, null)
+                        @Html.ActionLink("Редактировать", "EditSession", "Cinema", new { session = Json.Encode(sessionData) }, null)
                     </td>
-
                 </tr>
-
-
-                                }
-                            }
+                }
+            }
     </table>
-
-
-         }
+        }

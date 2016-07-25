@@ -1,32 +1,18 @@
 ﻿@model CinemaSchedule.Models.Sessions
 
 @Html.Label("Редактировать сеансы", new { @class = "mtop20", style = "font-size: 20px;" })
-
 @using (Html.BeginForm("DeleteSession", "Cinema", FormMethod.Post))
-{      
-        @Html.TextBoxFor(a=>a.Theater, new { @class = "form-control mtop20", @readonly = "readonly" })
-        @Html.TextBoxFor(a=>a.Movie.Title, new { @class = "form-control mtop20", @readonly = "readonly" })
-        @Html.TextBoxFor(a=>a.Date, new { @class = "form-control mtop20", @readonly = "readonly" })
-        @Html.DropDownListFor(a=>a.Time, Model.Movie.Sessions.Select(a => new SelectListItem()
-           {
-               Text = a,
-               Value = string.Format("{0:hh\\:mm}", a)
+{
+    @Html.TextBoxFor(t => t.Theater, new { @class = "form-control mtop20", @readonly = "readonly" })
+    @Html.TextBoxFor(mt => mt.Movie.Title, new { @class = "form-control mtop20", @readonly = "readonly" })
+    @Html.TextBoxFor(d => d.Date, new { @class = "form-control mtop20", @readonly = "readonly" })
+    @Html.DropDownListFor(a => a.Time, Model.Movie.Sessions.Select(time => new SelectListItem()
+       {
+           Text = string.Format("{0:hh\\:mm}", time),
+           Value = string.Format("{0:hh\\:mm}", time)
+       }), new { size = 5, style = "width: 280px;", @class = "form-control mtop20" })
 
-           }), new { size = 5, style = "width: 280px;",  @class = "form-control mtop20" })
-
-        <br />
-
-
-    //var datawer = new Sessions()
-    //{
-    //    Theater = cinema.Theater,
-    //    Movie = cinema.Movies.FirstOrDefault().MovieTitle,
-    //    Date = Model.DateTime,
-    //    Time = Model.SelectedSession
-    //};
-
-        @*@Html.ActionLink("Удалить выбранный сеанс", "DeleteSession", "Cinema", datawer, null)*@
-        @Html.TextBox("Edit", "Удалить сеанс", new { type = "submit", @class = "btn btn-success mtop20" })
-        <br />
-        @Html.ActionLink("Добавить сеанс", "AddSession", "Cinema", null, new { @class = "btn btn-success mtop20" })
+    @Html.TextBox("Edit", "Удалить сеанс", new { type = "submit", @class = "btn btn-success mtop20" })
+    @Html.ActionLink("Добавить сеанс", "AddSession", "Cinema", null, new { @class = "btn btn-success mtop20 mleft10" })
+    @Html.ActionLink("Отмена", null, null, null, new { href = Request.UrlReferrer, @class = "btn btn-success mtop20 mleft10" })
 }

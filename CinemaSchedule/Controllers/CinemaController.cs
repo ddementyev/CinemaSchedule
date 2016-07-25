@@ -29,18 +29,18 @@ namespace CinemaSchedule.Controllers
 
         public ActionResult Sessions(Cinema cinema)
         {
-            if (ModelState.IsValid)
-            {
+            //if (ModelState.IsValid)
+            //{
                 var sessions = _cinemaDb.Sessions.Where(d => d.Date == cinema.DateTime).GroupBy(t => t.Theater).ToList();
                 cinema.Schedule = _scheduleService.MakeSchedule(sessions);
-            }
+           // }
             return View(cinema);
         }
 
         public ActionResult AddSession(SessionModel model)
         {
             //var model = new SessionModel();
-            if (model.Session != null)
+            if (model.Session != null && ModelState.IsValid)
             {
                 _cinemaService.EditSession(model.Session, ActionType.AddSession);
                 return View("Sessions");
@@ -64,7 +64,7 @@ namespace CinemaSchedule.Controllers
         public ActionResult DeleteSession(CinemaSchedule.Models.Sessions session)
         {
             IMapper Mapper = MappingConfig.MapperConfiguration.CreateMapper();
-            var dest = Mapper.Map<CinemaSchedule.Models.Sessions, Session>(session);
+            var dest = Mapper.Map<Session>(session);
             _cinemaService.EditSession(dest, ActionType.DeleteSession);
 
             return View("Sessions");
