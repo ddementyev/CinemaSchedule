@@ -1,11 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
 
 namespace CinemaSchedule.Models
 {
@@ -21,7 +17,6 @@ namespace CinemaSchedule.Models
         public string Theater { get; set; }
 
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         [Required(ErrorMessage = "Введите дату")]
         public string Date { get; set; }
 
@@ -35,6 +30,13 @@ namespace CinemaSchedule.Models
             {
                 yield return new ValidationResult("Выбранная дата не может быть раньше текущей", new[] { "Date" });
             }
+            else if (DateTime.Parse(Date ?? DateTime.Now.Date.ToString()).Date == DateTime.Now.Date)
+            {
+                if (TimeSpan.Parse(Time ?? DateTime.Now.TimeOfDay.ToString()) < DateTime.Now.TimeOfDay)
+                {
+                    yield return new ValidationResult("Выбранное время не может быть раньше текущего", new[] { "Time" });
+                }
+            }
         }
     }
 
@@ -44,7 +46,7 @@ namespace CinemaSchedule.Models
         public string Movie { get; set; }
     }
 
-    public class Sessions : BaseSession
+    public class AllSessions : BaseSession
     {
         public Movie Movie { get; set; }
     }

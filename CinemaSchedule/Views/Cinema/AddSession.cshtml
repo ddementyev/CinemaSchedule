@@ -3,6 +3,7 @@
 @Html.Label("Добавить сеанс", new { @class = "mtop20", style = "font-size: 20px;" })
 @using (Html.BeginForm("AddSession", "Cinema", FormMethod.Post))
 {
+    @Html.ValidationMessage("SameSession")<br />
     @Html.Label("Кинотеатр:", new { @class = "mtop20" });
     @Html.DropDownListFor(t => t.Session.Theater, Model.CinemaCatalog.Theaters.Select(list => new SelectListItem()
         {
@@ -25,5 +26,6 @@
     @Html.TextBoxFor(t => t.Session.Time, new { type = "time", @class = "form-control" })
     @Html.ValidationMessageFor(t => t.Session.Time)<br />
     @Html.TextBox("Add", "Добавить", new { type = "submit", @class = "btn btn-success mtop20" })
+    @Html.ActionLink("Отмена", null, null, null, new { href = "javascript:void(0)", onclick = "history.go(-1);", @class = "btn btn-success mtop20 mleft10" })
 }
 

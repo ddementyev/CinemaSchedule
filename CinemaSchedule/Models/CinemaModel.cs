@@ -2,15 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace CinemaSchedule.Models
 {
     public class Cinema : IValidatableObject
     {
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         [Required(ErrorMessage = "Введите дату")]
         public DateTime DateTime { get; set; }
 

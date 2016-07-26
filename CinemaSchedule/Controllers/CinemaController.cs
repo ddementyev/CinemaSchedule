@@ -1,73 +1,66 @@
 ﻿using AutoMapper;
-using CinemaSchedule.App_Start;
 using CinemaSchedule.Interfaces;
 using CinemaSchedule.Models;
-using CinemaSchedule.Services;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace CinemaSchedule.Controllers
 {
     public class CinemaController : Controller
     {
-        private readonly CinemaDbModel _cinemaDb;
         private readonly ICinemaService _cinemaService;
         private readonly IScheduleService _scheduleService;
 
-        public CinemaController(CinemaDbModel cinemaDb, ICinemaService cinemaService, IScheduleService scheduleService)
+        public CinemaController(ICinemaService cinemaService, IScheduleService scheduleService)
         {
-            _cinemaDb = cinemaDb;
             _cinemaService = cinemaService;
             _scheduleService = scheduleService;
         }
 
         public ActionResult Sessions(Cinema cinema)
         {
-            //if (ModelState.IsValid)
-            //{
-                var sessions = _cinemaDb.Sessions.Where(d => d.Date == cinema.DateTime).GroupBy(t => t.Theater).ToList();
-                cinema.Schedule = _scheduleService.MakeSchedule(sessions);
-           // }
+            cinema.Schedule = _scheduleService.MakeSchedule(cinema.DateTime);
             return View(cinema);
         }
 
         public ActionResult AddSession(SessionModel model)
         {
-            //var model = new SessionModel();
             if (model.Session != null && ModelState.IsValid)
             {
-                _cinemaService.EditSession(model.Session, ActionType.AddSession);
-                return View("Sessions");
+                var isSessionExist = _cinemaService.CheckSession(model.Session);
+
+                if (!isSessionExist)
+                {
+                    _cinemaService.EditSession(model.Session, ActionType.AddSession);
+                    return View("Sessions", new Cinema() { Schedule = _scheduleService.MakeSchedule(DateTime.Parse(model.Session.Date)) });
+                }
+                else
+                {
+                    ModelState.AddModelError("SameSession", "Ошибка: несколько одинаковых сеансов");
+                }
             }
 
-            model.CinemaCatalog = new CinemaCatalog()
-            {
-                Theaters = _cinemaDb.Theaters.ToList(),
-                Movies = _cinemaDb.Movies.ToList(),
-            };
-
+            model.CinemaCatalog = _cinemaService.GetCatalog();
             return View(model);
         }
 
         public ActionResult EditSession(string session)
         {
-            var res = JsonConvert.DeserializeObject<CinemaSchedule.Models.Sessions>(session);
-            return View(res);
+            if (session == null)
+            {
+                ModelState.AddModelError("NoSession", "Отсутствует сеанс для редактирования");
+                return View();
+            }
+            else return View(JsonConvert.DeserializeObject<AllSessions>(session));
         }
 
-        public ActionResult DeleteSession(CinemaSchedule.Models.Sessions session)
+        public ActionResult DeleteSession(AllSessions session)
         {
-            IMapper Mapper = MappingConfig.MapperConfiguration.CreateMapper();
-            var dest = Mapper.Map<Session>(session);
-            _cinemaService.EditSession(dest, ActionType.DeleteSession);
+            var sessionToEdit = Mapper.Map<AllSessions, Session>(session);
+            _cinemaService.EditSession(sessionToEdit, ActionType.DeleteSession);
 
-            return View("Sessions");
+            return View("Sessions", new Cinema() { Schedule = _scheduleService.MakeSchedule(DateTime.Parse(session.Date)) });
         }
     }
 }

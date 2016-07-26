@@ -144,7 +144,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="JavaScript.js" />
     <Content Include="packages.config">
       <SubType>Designer</SubType>
     </Content>
@@ -201,11 +200,6 @@
     <Compile Include="Interfaces\IScheduleService.cs" />
     <Compile Include="Models\ActionType.cs" />
     <Compile Include="Models\CinemaDb\CinemaDbModel.cs" />
-    <Compile Include="Migrations\201607250823387_v1.0.0.cs" />
-    <Compile Include="Migrations\201607250823387_v1.0.0.Designer.cs">
-      <DependentUpon>201607250823387_v1.0.0.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\SessionModel.cs" />
     <Compile Include="Controllers\CinemaController.cs" />
     <Compile Include="Global.asax.cs">
@@ -222,11 +216,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201607250823387_v1.0.0.resx">
-      <DependentUpon>201607250823387_v1.0.0.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
