@@ -2,6 +2,12 @@
 
 @Html.Label("Редактировать сеансы", new { @class = "mtop20", style = "font-size: 20px;" })<br />
 @Html.ValidationMessage("NoSession", new { @class = "mtop20" })<br />
+@Html.ValidationMessage("DeleteSession", new { @class = "mtop20" })<br />
+@if (!ViewData.ModelState.IsValid)
+{
+    @Html.ActionLink("Назад", null, null, null, new { href = "javascript:void(0)", onclick = "history.go(-1);", @class = "btn btn-success mtop20" })
+    @Html.ActionLink("На главную", "Sessions", "Cinema", new { @class = "btn btn-success mtop20 mleft10" })
+}
 @if (ViewData.ModelState.IsValid)
 {
     using (Html.BeginForm("DeleteSession", "Cinema", FormMethod.Post))
@@ -14,7 +20,6 @@
                Text = string.Format("{0:hh\\:mm}", DateTime.Parse(time, null).TimeOfDay),
                Value = string.Format("{0:hh\\:mm}", DateTime.Parse(time, null).TimeOfDay),
            }), new { size = 5, style = "width: 280px;", @class = "form-control mtop20" })
-
         @Html.TextBox("Edit", "Удалить сеанс", new { type = "submit", @class = "btn btn-success mtop20" })
         @Html.ActionLink("Добавить сеанс", "AddSession", "Cinema", null, new { @class = "btn btn-success mtop20 mleft10" })
         @Html.ActionLink("Отмена", null, null, null, new { href = "javascript:void(0)", onclick = "history.go(-1);", @class = "btn btn-success mtop20 mleft10" })

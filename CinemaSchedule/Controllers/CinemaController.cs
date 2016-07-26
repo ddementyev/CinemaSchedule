@@ -57,6 +57,12 @@ namespace CinemaSchedule.Controllers
 
         public ActionResult DeleteSession(AllSessions session)
         {
+            if (session.Time == null)
+            {
+                ModelState.AddModelError("DeleteSession", "Выберите сеанс для удаления");
+                return View("EditSession", session);
+            }
+
             var sessionToEdit = Mapper.Map<AllSessions, Session>(session);
             _cinemaService.EditSession(sessionToEdit, ActionType.DeleteSession);
 
