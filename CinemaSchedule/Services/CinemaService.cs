@@ -31,8 +31,8 @@ namespace CinemaSchedule.Services
                  {
                      new SqlParameter("@theater", SqlDbType.VarChar) { Value = session.Theater },
                      new SqlParameter("@movie", SqlDbType.VarChar) { Value = session.Movie },
-                     new SqlParameter("@date", SqlDbType.Date) { Value = DateTime.Parse(session.Date) },
-                     new SqlParameter("@time", SqlDbType.Time) { Value = TimeSpan.Parse(session.Time) }
+                     new SqlParameter("@date", SqlDbType.DateTime) { Value = DateTime.Parse(session.Date) },
+                     new SqlParameter("@time", SqlDbType.Timestamp) { Value = TimeSpan.Parse(session.Time) }
                  };
 
                 command.Parameters.AddRange(parameters.ToArray());
