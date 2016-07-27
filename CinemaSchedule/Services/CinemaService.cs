@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 
 namespace CinemaSchedule.Services
@@ -31,7 +32,7 @@ namespace CinemaSchedule.Services
                  {
                      new SqlParameter("@theater", SqlDbType.VarChar) { Value = session.Theater },
                      new SqlParameter("@movie", SqlDbType.VarChar) { Value = session.Movie },
-                     new SqlParameter("@date", SqlDbType.Date) { Value = DateTime.Parse(session.Date) },
+                     new SqlParameter("@date", SqlDbType.Date) { Value = DateTime.Parse(session.Date, CultureInfo.CreateSpecificCulture("ru-RU")) },
                      new SqlParameter("@time", SqlDbType.Time) { Value = TimeSpan.Parse(session.Time) }
                  };
 
