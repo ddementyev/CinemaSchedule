@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 
 namespace CinemaSchedule.Models
 {
@@ -26,13 +27,13 @@ namespace CinemaSchedule.Models
         public string Time { get; set; }
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (DateTime.Parse(Date ?? DateTime.Now.Date.ToString()).Date < DateTime.Now.Date)
+            if (DateTime.Parse((Date ?? DateTime.Now.Date.ToString()), CultureInfo.CreateSpecificCulture("en-US")).Date < DateTime.Now.Date)
             {
                 yield return new ValidationResult("Выбранная дата не может быть раньше текущей", new[] { "Date" });
             }
             else if (DateTime.Parse(Date ?? DateTime.Now.Date.ToString()).Date == DateTime.Now.Date)
             {
-                if (TimeSpan.Parse(Time ?? DateTime.Now.TimeOfDay.ToString()) < DateTime.Now.TimeOfDay)
+                if (TimeSpan.Parse((Time ?? DateTime.Now.TimeOfDay.ToString()), CultureInfo.CreateSpecificCulture("en-US")) < DateTime.Now.TimeOfDay)
                 {
                     yield return new ValidationResult("Выбранное время не может быть раньше текущего", new[] { "Time" });
                 }

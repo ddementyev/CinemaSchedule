@@ -3,6 +3,7 @@ using CinemaSchedule.Interfaces;
 using CinemaSchedule.Models;
 using Newtonsoft.Json;
 using System;
+using System.Globalization;
 using System.Web.Mvc;
 
 namespace CinemaSchedule.Controllers
@@ -33,7 +34,7 @@ namespace CinemaSchedule.Controllers
                 if (!isSessionExist)
                 {
                     _cinemaService.EditSession(model.Session, ActionType.AddSession);
-                    return View("Sessions", new Cinema() { Schedule = _scheduleService.MakeSchedule(DateTime.Parse(model.Session.Date)) });
+                    return View("Sessions", new Cinema() { Schedule = _scheduleService.MakeSchedule(DateTime.Parse(model.Session.Date, CultureInfo.CreateSpecificCulture("en-US"))) });
                 }
                 else
                 {
@@ -66,7 +67,7 @@ namespace CinemaSchedule.Controllers
             var sessionToEdit = Mapper.Map<AllSessions, Session>(session);
             _cinemaService.EditSession(sessionToEdit, ActionType.DeleteSession);
 
-            return View("Sessions", new Cinema() { Schedule = _scheduleService.MakeSchedule(DateTime.Parse(session.Date)) });
+            return View("Sessions", new Cinema() { Schedule = _scheduleService.MakeSchedule(DateTime.Parse(session.Date, CultureInfo.CreateSpecificCulture("en-US"))) });
         }
     }
 }
